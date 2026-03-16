@@ -112,8 +112,6 @@ class _WeekdayCircle extends StatelessWidget {
   Color get _backgroundColor {
     if (day >= 9 && day <= 13) {
       return generalGrey; // 9-13 灰色
-    } else if (day == 14) {
-      return Colors.black; // 14 黑色
     } else if (day == 15) {
       return Colors.white; // 15 白色
     }
@@ -147,14 +145,26 @@ class _WeekdayCircle extends StatelessWidget {
                   ? Border.all(color: Colors.grey.shade300, width: 2)
                   : null,
             ),
-            child: Text(
-              '$day',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: _textColor,
-              ),
-            ),
+            //child 需要的是一個表達式，但 if else是語句，Dart 不允許這樣寫，只能用三元運算子
+            child: day == 14
+                // 14 號：不顯示數字，改成把一張圖片塞進圓形裡
+                ? ClipOval(
+                    child: Image.asset(
+                      'assets/icons/stravaShoeInverted.jpg',
+                      width: 24,
+                      height: 24,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                // 其他日期照原本顯示數字
+                : Text(
+                    '$day',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: _textColor,
+                    ),
+                  ),
           ),
         ],
       ),
