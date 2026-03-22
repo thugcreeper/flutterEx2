@@ -6,6 +6,7 @@ import 'widgets/functionPage1.dart';
 import 'widgets/functionPage3.dart';
 import 'widgets/functionPage4.dart';
 import 'widgets/activityCard.dart';
+import 'widgets/recommendedChallenge.dart';
 import 'widgets/recommendedPerson.dart';
 
 //顏色用小畫家的吸管去吸，之後開啟編輯顏色即可知道色碼，用變數存比較方便後續使用
@@ -168,6 +169,7 @@ class _HomePageState extends State<HomePage> {
                     city: '基隆市',
                     imageName: 'myActivity.jpg',
                   ),
+                  const Divider(height: 30, thickness: 6, color: generalGrey),
                   const ActivityCard(
                     yourName: '洪賢 王',
                     activityName: '復健',
@@ -181,8 +183,14 @@ class _HomePageState extends State<HomePage> {
                     imageName: 'myActivity2.jpg',
                     showAchievements: true,
                     achievementCounts: [0, 1, 0],
+                    likeCount: 3,
+                    likedUserProfileImages: [
+                      'user4.jpg',
+                      'user5.jpg',
+                      'user6.jpg',
+                    ],
                   ),
-                  const Divider(height: 30, thickness: 6, color: generalGrey),
+                  SizedBox(height: 20),
                   RecommendedPerson(
                     people: const [
                       RecommendedPersonInfo(
@@ -196,13 +204,12 @@ class _HomePageState extends State<HomePage> {
                         imageName: 'userX.png',
                       ),
                       RecommendedPersonInfo(
-                        name: 'Kyle Crane(哈蘭超人))',
+                        name: 'Kyle Crane(哈蘭超人)',
                         introduce: '粉絲在 Strava 的最愛',
                         imageName: 'userCrane.webp',
                       ),
                     ],
                   ),
-                  const Divider(height: 30, thickness: 6, color: generalGrey),
                   const ActivityCard(
                     yourName: '瘩瘩 魯',
                     yourProfileImage: 'userL.jpg',
@@ -217,6 +224,66 @@ class _HomePageState extends State<HomePage> {
                     imageName: 'myActivity3.jpg',
                     showAchievements: true,
                     achievementCounts: [1, 1, 0],
+                  ),
+                  const Divider(height: 30, thickness: 6, color: generalGrey),
+                  const ActivityCard(
+                    yourName: 'Kyle Crane(哈蘭超人)',
+                    yourProfileImage: 'userCrane.webp',
+                    activityName: '恆春->知本',
+                    activityType: 'ride',
+                    distance: '111.17 公里',
+                    climbHeight: '1134 公尺',
+                    duringtime: '5小時26分',
+                    activityStartTime: '清晨7:34',
+                    district: '恆春鎮',
+                    city: '屏東縣',
+                    imageName: 'myActivity4.jpg',
+                  ),
+                  const Divider(height: 30, thickness: 6, color: generalGrey),
+                  const RecommendedChallenge(
+                    activities: [
+                      RecommendedChallengeInfo(
+                        howManyPeopleJoind: '292,000',
+                        activityName: '三月Gran Dondo 挑戰',
+                        introduce: '100公里。一次騎行。出發吧!',
+                        reward: '數位獎盃',
+                        imageName: 'challenge1.jpg',
+                      ),
+                      RecommendedChallengeInfo(
+                        howManyPeopleJoind: '968,000',
+                        activityName: '三月400分鐘x Runna挑戰',
+                        introduce: '紀錄400分鐘的活動。解鎖2週免費體驗+贏取夏威夷賽事之旅!',
+                        reward: '獎勵',
+                        imageName: 'challenge2.jpg',
+                      ),
+                      RecommendedChallengeInfo(
+                        howManyPeopleJoind: '1,123,000',
+                        activityName: '三月十天活動挑戰',
+                        introduce: '你能連續十天做到嗎?',
+                        reward: '數位獎盃',
+                        imageName: 'challenge3.jpg',
+                      ),
+                    ],
+                  ),
+                  const ActivityCard(
+                    yourName: 'Will',
+                    yourProfileImage: 'userX.png',
+                    activityName: '下午騎車',
+                    activityType: 'ride',
+                    distance: '22.17 公里',
+                    climbHeight: '63 公尺',
+                    duringtime: '1小時16分',
+                    activityStartTime: '下午16:19',
+                    district: '淡水區',
+                    city: '新北市',
+                    imageName: 'myActivity5.jpg',
+                    likeCount: 5,
+                    //按讚者的頭像，最多傳3個
+                    likedUserProfileImages: [
+                      'user1.jpg',
+                      'user2.jpg',
+                      'user3.jpg',
+                    ],
                   ),
                 ],
               ),

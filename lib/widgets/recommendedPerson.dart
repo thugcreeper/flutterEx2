@@ -18,25 +18,46 @@ class RecommendedPersonInfo {
 }
 
 // 這是推薦他人的整個區塊（上方標題 + 可左右滑動的人卡片）
-class RecommendedPerson extends StatelessWidget {
+class RecommendedPerson extends StatefulWidget {
   /// 卡片列表資料
   final List<RecommendedPersonInfo> people;
 
   /// 卡片寬度與高度，讓你可以自訂
   final double cardWidth;
   final double cardHeight;
+  final double viewportFraction;
 
   const RecommendedPerson({
     super.key,
     required this.people,
     this.cardWidth = 260,
     this.cardHeight = 280,
+    this.viewportFraction = 0.72,
   });
+
+  @override
+  State<RecommendedPerson> createState() => _RecommendedPersonState();
+}
+
+class _RecommendedPersonState extends State<RecommendedPerson> {
+  late final PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: widget.viewportFraction);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: cardHeight + 100,
+      height: widget.cardHeight + 100,
       color: generalGrey,
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
@@ -66,22 +87,22 @@ class RecommendedPerson extends StatelessWidget {
           const SizedBox(height: 20), // 標題與推薦人卡片之間的間距
           // 可左右滑動的卡片列
           SizedBox(
-            height: cardHeight,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  const SizedBox(width: 30),
-                  for (final person in people) ...[
-                    _PersonCard(
-                      info: person,
-                      width: cardWidth,
-                      height: cardHeight,
-                    ),
-                    const SizedBox(width: 12),
-                  ],
-                ],
-              ),
+            height: widget.cardHeight,
+            child: PageView.builder(
+              controller: _pageController,
+              itemCount: widget.people.length,
+              itemBuilder: (context, index) {
+                final person = widget.people[index];
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: _PersonCard(
+                    info: person,
+                    width: widget.cardWidth,
+                    height: widget.cardHeight,
+                  ),
+                );
+              },
             ),
           ),
         ],

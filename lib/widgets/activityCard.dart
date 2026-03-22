@@ -17,6 +17,8 @@ class ActivityCard extends StatelessWidget {
   final String imageName; // 要顯示在卡片下方的圖片名稱（放在 assets/images/ 底下）
   final bool showAchievements; // 是否改成「距離+爬升+成就」版型
   final List<int> achievementCounts; // [金牌數量, 銀牌數量, 銅牌數量]，長度預期為 3
+  final int? likeCount; // 按讚人數（不傳就不顯示）
+  final List<String> likedUserProfileImages; // 按讚者頭像（最多顯示 3 個，支援重疊）
 
   const ActivityCard({
     super.key,
@@ -33,6 +35,8 @@ class ActivityCard extends StatelessWidget {
     required this.imageName,
     this.showAchievements = false,
     this.achievementCounts = const [0, 0, 0],
+    this.likeCount,
+    this.likedUserProfileImages = const [],
   });
 
   @override
@@ -350,6 +354,26 @@ class ActivityCard extends StatelessWidget {
             width: double.infinity,
             fit: BoxFit.fitWidth,
           ),
+          if (likeCount != null || likedUserProfileImages.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(30, 12, 16, 0), //
+              child: Row(
+                children: [
+                  if (likedUserProfileImages.isNotEmpty) //顯示按讚者頭像（最多3個，重疊顯示）
+                    _OverlappingProfileImages(images: likedUserProfileImages),
+                  if (likedUserProfileImages.isNotEmpty)
+                    const SizedBox(width: 8),
+                  Text(
+                    '${likeCount ?? 0} 個人按讚',
+                    style: const TextStyle(
+                      color: smallTextGrey,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           //按讚、分享、留言icon，用expanded平均分配
           SizedBox(height: 12),
           Row(
@@ -377,6 +401,60 @@ class ActivityCard extends StatelessWidget {
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OverlappingProfileImages extends StatelessWidget {
+  final List<String> images;
+
+  const _OverlappingProfileImages({required this.images});
+
+  @override
+  Widget build(BuildContext context) {
+    // 最多只顯示 3 個頭像，超過就截斷，避免佔太多寬度。
+    final displayImages = images.take(3).toList(growable: false);
+    // avatarSize 控制每顆頭像大小；overlapOffset 控制左位移步距（小於 avatarSize 就會重疊）。
+    const double avatarSize = 30;
+    const double overlapOffset = 20; // 每個頭像重疊的距離
+    // Stack 需要明確寬度，這個公式可剛好包住最後一顆頭像。
+    final double stackWidth =
+        avatarSize + (displayImages.length - 1) * overlapOffset;
+
+    return SizedBox(
+      width: stackWidth,
+      height: avatarSize,
+      child: Stack(
+        children: [
+          for (int i = 0; i < displayImages.length; i++)
+            Positioned(
+              // 依序往右位移。因為偏移量小於頭像大小，所以會產生重疊效果。
+              left: i * overlapOffset,
+              child: Container(
+                width: avatarSize,
+                height: avatarSize,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  // 白色邊框可把重疊層次分開，看起來比較乾淨。
+                  border: Border.all(color: Colors.white, width: 2.5),
+                ),
+                child: ClipOval(
+                  child: Image.asset(
+                    'assets/images/${displayImages[i]}',
+                    fit: BoxFit.cover,
+                    // 圖檔失敗時退回預設頭像，避免破圖。
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        'assets/images/head.jpg',
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
