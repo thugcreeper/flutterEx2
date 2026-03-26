@@ -202,14 +202,14 @@ class _HomePageState extends State<HomePage> {
                     RecommendedPerson(
                       people: const [
                         RecommendedPersonInfo(
-                          name: '魯瘩瘩',
-                          introduce: '你附近的 Local Legend',
-                          imageName: 'userL.jpg',
-                        ),
-                        RecommendedPersonInfo(
                           name: 'Will',
                           introduce: '粉絲在 Strava 的最愛',
                           imageName: 'userX.png',
+                        ),
+                        RecommendedPersonInfo(
+                          name: '魯瘩瘩',
+                          introduce: '你附近的 Local Legend',
+                          imageName: 'userL.jpg',
                         ),
                         RecommendedPersonInfo(
                           name: 'Kyle Crane(哈蘭超人)',
@@ -268,7 +268,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         RecommendedChallengeInfo(
                           howManyPeopleJoind: '968,000',
-                          activityName: '三月400分鐘x Runna挑戰',
+                          activityName: '三月400分鐘 x Runna挑戰',
                           introduce: '紀錄400分鐘的活動。解鎖2週免費體驗+贏取夏威夷賽事之旅!',
                           reward: '獎勵',
                           imageName: 'challenge2.jpg',

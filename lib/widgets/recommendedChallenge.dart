@@ -89,7 +89,7 @@ class _RecommendedChallengeState extends State<RecommendedChallenge> {
           const SizedBox(height: 20), // 標題與推薦人卡片之間的間距
           // 可左右滑動的卡片列
           SizedBox(
-            height: widget.cardHeight,
+            height: widget.cardHeight + 12,
             child: PageView.builder(
               controller: _pageController,
               itemCount: widget.activities.length,
@@ -97,7 +97,7 @@ class _RecommendedChallengeState extends State<RecommendedChallenge> {
                 final activity = widget.activities[index];
 
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
                   child: _ChallengeCard(
                     info: activity,
                     width: widget.cardWidth,
@@ -149,9 +149,10 @@ class _ChallengeCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 5,
+            spreadRadius: 0,
+            offset: const Offset(0, 3), //陰影往下偏移6像素
           ),
         ],
       ),
@@ -170,6 +171,7 @@ class _ChallengeCard extends StatelessWidget {
                     style: GoogleFonts.rubik(
                       fontSize: 14,
                       color: smallTextGrey,
+                      fontWeight: .w500,
                     ),
                   ),
                 ),
@@ -217,6 +219,7 @@ class _ChallengeCard extends StatelessWidget {
                             style: GoogleFonts.rubik(
                               fontSize: 16,
                               color: smallTextGrey,
+                              fontWeight: .w500,
                             ),
                           ),
                           SizedBox(height: 10), //活動簡介與獎勵的間距

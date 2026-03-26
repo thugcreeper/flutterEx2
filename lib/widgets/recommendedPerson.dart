@@ -87,7 +87,7 @@ class _RecommendedPersonState extends State<RecommendedPerson> {
           const SizedBox(height: 20), // 標題與推薦人卡片之間的間距
           // 可左右滑動的卡片列
           SizedBox(
-            height: widget.cardHeight,
+            height: widget.cardHeight + 12,
             child: PageView.builder(
               controller: _pageController,
               itemCount: widget.people.length,
@@ -95,7 +95,7 @@ class _RecommendedPersonState extends State<RecommendedPerson> {
                 final person = widget.people[index];
 
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
                   child: _PersonCard(
                     info: person,
                     width: widget.cardWidth,
@@ -133,9 +133,10 @@ class _PersonCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 5,
+            spreadRadius: 0,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -177,7 +178,12 @@ class _PersonCard extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 info.introduce,
-                style: const TextStyle(fontSize: 16, color: smallTextGrey),
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: smallTextGrey,
+                  fontWeight: .w500,
+                ),
+
                 maxLines: 2,
 
                 overflow: TextOverflow.ellipsis,
