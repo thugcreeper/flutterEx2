@@ -88,8 +88,12 @@ class ActivityCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '今天的 $activityStartTime · Strava App',
-                          style: GoogleFonts.rubik(fontSize: 12),
+                          '$activityStartTime · Strava App',
+                          style: GoogleFonts.rubik(
+                            color: smallTextGrey,
+                            fontSize: 14,
+                            fontWeight: .w500,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Row(
@@ -97,14 +101,14 @@ class ActivityCard extends StatelessWidget {
                             if (activityType.toLowerCase() == 'run')
                               Image.asset(
                                 'assets/icons/stravaShoe.jpg',
-                                width: 16,
-                                height: 16,
+                                width: 24,
+                                height: 24,
                               ),
                             if (activityType.toLowerCase() == 'ride')
                               Image.asset(
                                 'assets/icons/stravaBicycle.jpg',
-                                width: 16,
-                                height: 16,
+                                width: 24,
+                                height: 24,
                               ),
                             if (activityType.toLowerCase() == 'run' ||
                                 activityType.toLowerCase() == 'ride')
@@ -115,6 +119,7 @@ class ActivityCard extends StatelessWidget {
                               style: const TextStyle(
                                 color: smallTextGrey,
                                 fontSize: 12,
+                                fontWeight: .bold,
                               ),
                             ),
                           ],
@@ -129,7 +134,7 @@ class ActivityCard extends StatelessWidget {
                   activityName,
                   style: const TextStyle(
                     fontSize: 28, //約和"首頁"標題字一樣大
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -281,9 +286,8 @@ class ActivityCard extends StatelessWidget {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      // 金牌
-                                      ...List.generate(goldCount, (index) {
-                                        return Padding(
+                                      if (goldCount > 0)
+                                        Padding(
                                           padding: const EdgeInsets.only(
                                             right: 4.0,
                                           ),
@@ -292,11 +296,9 @@ class ActivityCard extends StatelessWidget {
                                             width: 22,
                                             height: 22,
                                           ),
-                                        );
-                                      }),
-                                      // 銀牌
-                                      ...List.generate(silverCount, (index) {
-                                        return Padding(
+                                        ),
+                                      if (silverCount > 0)
+                                        Padding(
                                           padding: const EdgeInsets.only(
                                             right: 4.0,
                                           ),
@@ -305,11 +307,9 @@ class ActivityCard extends StatelessWidget {
                                             width: 22,
                                             height: 22,
                                           ),
-                                        );
-                                      }),
-                                      // 銅牌
-                                      ...List.generate(bronzeCount, (index) {
-                                        return Padding(
+                                        ),
+                                      if (bronzeCount > 0)
+                                        Padding(
                                           padding: const EdgeInsets.only(
                                             right: 4.0,
                                           ),
@@ -318,8 +318,7 @@ class ActivityCard extends StatelessWidget {
                                             width: 22,
                                             height: 22,
                                           ),
-                                        );
-                                      }),
+                                        ),
                                       Text(
                                         totalAchievements.toString(),
                                         style: GoogleFonts.rubik(

@@ -26,6 +26,10 @@ class MyStrava extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
+        scrollbarTheme: const ScrollbarThemeData(
+          thickness: MaterialStatePropertyAll(4),
+          radius: Radius.circular(8),
+        ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
           elevation: 0,
@@ -39,6 +43,7 @@ class MyStrava extends StatelessWidget {
           ),
         ),
       ),
+      scrollBehavior: const ScrollBehavior().copyWith(scrollbars: true),
       debugShowCheckedModeBanner: false,
       home: const HomePage(title: ''),
     );
@@ -101,191 +106,218 @@ class _HomePageState extends State<HomePage> {
         child: Stack(
           children: [
             // 最底層：可滾動的內容包含活動卡片與推薦好友
-            SingleChildScrollView(
-              controller: _scrollController, // 讓整個頁面可以滾動，包含分頁區和活動卡片區
-              padding: const EdgeInsets.only(
-                bottom: 120,
-              ), // 預留底部高度，避免被 bottom bar 蓋住
-              child: Column(
-                children: [
-                  const Divider(height: 30, thickness: 3, color: generalGrey),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    height: 200,
-                    child: PageView(
-                      controller: _pageController,
-                      onPageChanged: (index) {
-                        setState(() {
-                          _currentPage = index;
-                        });
-                      },
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: SportInfo(),
+            Scrollbar(
+              controller: _scrollController,
+              //timeToFade: const Duration(milliseconds: 800),
+              //fadeDuration: const Duration(milliseconds: 250),
+              thumbVisibility: false,
+              child: SingleChildScrollView(
+                controller: _scrollController, // 讓整個頁面可以滾動，包含分頁區和活動卡片區
+                padding: const EdgeInsets.only(
+                  bottom: 120,
+                ), // 預留底部高度，避免被 bottom bar 蓋住
+                child: Column(
+                  children: [
+                    const Divider(height: 30, thickness: 3, color: generalGrey),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 200,
+                      child: PageView(
+                        controller: _pageController,
+                        onPageChanged: (index) {
+                          setState(() {
+                            _currentPage = index;
+                          });
+                        },
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: SportInfo(),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: StreakPage(),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: SetPersonalGoals(),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: PersonalWeeklySnapshot(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(4, (index) {
+                        final bool isActive = index == _currentPage;
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isActive
+                                ? Colors.grey.shade700
+                                : generalGrey,
+                          ),
+                        );
+                      }),
+                    ),
+                    const SizedBox(height: 8),
+                    const Divider(height: 30, thickness: 6, color: generalGrey),
+                    const ActivityCard(
+                      yourName: '洪賢 王',
+                      activityName: '午後健行',
+                      activityType: 'Run',
+                      distance: '9.30 公里',
+                      climbHeight: '386 公尺',
+                      duringtime: '2小時12分',
+                      activityStartTime: '今天的 下午1:32',
+                      district: '中正區',
+                      city: '基隆市',
+                      imageName: 'myActivity.jpg',
+                    ),
+                    const Divider(height: 30, thickness: 6, color: generalGrey),
+                    const ActivityCard(
+                      yourName: '瘩瘩 魯',
+                      yourProfileImage: 'userL.jpg',
+                      activityName: '環尛台灣',
+                      activityType: 'ride',
+                      distance: '16.66 公里',
+                      climbHeight: '118 公尺',
+                      duringtime: '2小時12分',
+                      activityStartTime: '2025年8月26日 下午3:25',
+                      district: '香山區',
+                      city: '新竹市',
+                      imageName: 'myActivity3.jpg',
+                      showAchievements: true,
+                      achievementCounts: [1, 1, 0],
+                    ),
+
+                    SizedBox(height: 20),
+                    RecommendedPerson(
+                      people: const [
+                        RecommendedPersonInfo(
+                          name: '魯瘩瘩',
+                          introduce: '你附近的 Local Legend',
+                          imageName: 'userL.jpg',
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: StreakPage(),
+                        RecommendedPersonInfo(
+                          name: 'Will',
+                          introduce: '粉絲在 Strava 的最愛',
+                          imageName: 'userX.png',
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: SetPersonalGoals(),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: PersonalWeeklySnapshot(),
+                        RecommendedPersonInfo(
+                          name: 'Kyle Crane(哈蘭超人)',
+                          introduce: '粉絲在 Strava 的最愛',
+                          imageName: 'userCrane.webp',
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(4, (index) {
-                      final bool isActive = index == _currentPage;
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isActive ? Colors.grey.shade700 : generalGrey,
+                    const ActivityCard(
+                      yourName: '洪賢 王',
+                      activityName: '復健',
+                      activityType: 'ride',
+                      distance: '50.37 公里',
+                      climbHeight: '346 公尺',
+                      duringtime: '2小時12分',
+                      activityStartTime: '2025年6月10日 上午10:13',
+                      district: '貢寮區',
+                      city: '新北市',
+                      imageName: 'myActivity2.jpg',
+                      showAchievements: true,
+                      achievementCounts: [0, 1, 0],
+                      likeCount: 2,
+                      likedUserProfileImages: ['user4.jpg', 'user5.jpg'],
+                    ),
+                    const Divider(height: 30, thickness: 6, color: generalGrey),
+                    const ActivityCard(
+                      yourName: '洪賢 王',
+                      //yourProfileImage: 'head.png',
+                      activityName: '晨間騎車',
+                      activityType: 'ride',
+                      distance: '41.24 公里',
+                      climbHeight: '250 公尺',
+                      duringtime: '2小時22分',
+                      activityStartTime: '2025年1月30日清晨6:46',
+                      district: '香山區',
+                      city: '新竹市',
+                      imageName: 'myActivity6.jpg',
+                      showAchievements: true,
+                      achievementCounts: [6, 1, 1],
+                      likeCount: 3,
+                      //按讚者的頭像，最多傳3個
+                      likedUserProfileImages: [
+                        'user1.jpg',
+                        'user5.jpg',
+                        'user6.jpg',
+                      ],
+                    ),
+                    const RecommendedChallenge(
+                      activities: [
+                        RecommendedChallengeInfo(
+                          howManyPeopleJoind: '292,000',
+                          activityName: '三月Gran Dondo 挑戰',
+                          introduce: '100公里。一次騎行。出發吧!',
+                          reward: '數位獎盃',
+                          imageName: 'challenge1.jpg',
                         ),
-                      );
-                    }),
-                  ),
-                  const SizedBox(height: 8),
-                  const Divider(height: 30, thickness: 6, color: generalGrey),
-                  const ActivityCard(
-                    yourName: '洪賢 王',
-                    activityName: '午後健行',
-                    activityType: 'Run',
-                    distance: '9.30 公里',
-                    climbHeight: '386 公尺',
-                    duringtime: '2小時12分',
-                    activityStartTime: '下午1:32',
-                    district: '中正區',
-                    city: '基隆市',
-                    imageName: 'myActivity.jpg',
-                  ),
-                  const Divider(height: 30, thickness: 6, color: generalGrey),
-                  const ActivityCard(
-                    yourName: '洪賢 王',
-                    activityName: '復健',
-                    activityType: 'ride',
-                    distance: '50.37 公里',
-                    climbHeight: '346 公尺',
-                    duringtime: '2小時12分',
-                    activityStartTime: '上午10:13',
-                    district: '貢寮區',
-                    city: '新北市',
-                    imageName: 'myActivity2.jpg',
-                    showAchievements: true,
-                    achievementCounts: [0, 1, 0],
-                    likeCount: 3,
-                    likedUserProfileImages: [
-                      'user4.jpg',
-                      'user5.jpg',
-                      'user6.jpg',
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  RecommendedPerson(
-                    people: const [
-                      RecommendedPersonInfo(
-                        name: '魯瘩瘩',
-                        introduce: '你附近的 Local Legend',
-                        imageName: 'userL.jpg',
-                      ),
-                      RecommendedPersonInfo(
-                        name: 'Will',
-                        introduce: '粉絲在 Strava 的最愛',
-                        imageName: 'userX.png',
-                      ),
-                      RecommendedPersonInfo(
-                        name: 'Kyle Crane(哈蘭超人)',
-                        introduce: '粉絲在 Strava 的最愛',
-                        imageName: 'userCrane.webp',
-                      ),
-                    ],
-                  ),
-                  const ActivityCard(
-                    yourName: '瘩瘩 魯',
-                    yourProfileImage: 'userL.jpg',
-                    activityName: '環尛台灣',
-                    activityType: 'ride',
-                    distance: '16.66 公里',
-                    climbHeight: '118 公尺',
-                    duringtime: '2小時12分',
-                    activityStartTime: '下午3:25',
-                    district: '香山區',
-                    city: '新竹市',
-                    imageName: 'myActivity3.jpg',
-                    showAchievements: true,
-                    achievementCounts: [1, 1, 0],
-                  ),
-                  const Divider(height: 30, thickness: 6, color: generalGrey),
-                  const ActivityCard(
-                    yourName: 'Kyle Crane(哈蘭超人)',
-                    yourProfileImage: 'userCrane.webp',
-                    activityName: '恆春->知本',
-                    activityType: 'ride',
-                    distance: '111.17 公里',
-                    climbHeight: '1134 公尺',
-                    duringtime: '5小時26分',
-                    activityStartTime: '清晨7:34',
-                    district: '恆春鎮',
-                    city: '屏東縣',
-                    imageName: 'myActivity4.jpg',
-                  ),
-                  const Divider(height: 30, thickness: 6, color: generalGrey),
-                  const RecommendedChallenge(
-                    activities: [
-                      RecommendedChallengeInfo(
-                        howManyPeopleJoind: '292,000',
-                        activityName: '三月Gran Dondo 挑戰',
-                        introduce: '100公里。一次騎行。出發吧!',
-                        reward: '數位獎盃',
-                        imageName: 'challenge1.jpg',
-                      ),
-                      RecommendedChallengeInfo(
-                        howManyPeopleJoind: '968,000',
-                        activityName: '三月400分鐘x Runna挑戰',
-                        introduce: '紀錄400分鐘的活動。解鎖2週免費體驗+贏取夏威夷賽事之旅!',
-                        reward: '獎勵',
-                        imageName: 'challenge2.jpg',
-                      ),
-                      RecommendedChallengeInfo(
-                        howManyPeopleJoind: '1,123,000',
-                        activityName: '三月十天活動挑戰',
-                        introduce: '你能連續十天做到嗎?',
-                        reward: '數位獎盃',
-                        imageName: 'challenge3.jpg',
-                      ),
-                    ],
-                  ),
-                  const ActivityCard(
-                    yourName: 'Will',
-                    yourProfileImage: 'userX.png',
-                    activityName: '下午騎車',
-                    activityType: 'ride',
-                    distance: '22.17 公里',
-                    climbHeight: '63 公尺',
-                    duringtime: '1小時16分',
-                    activityStartTime: '下午16:19',
-                    district: '淡水區',
-                    city: '新北市',
-                    imageName: 'myActivity5.jpg',
-                    likeCount: 5,
-                    //按讚者的頭像，最多傳3個
-                    likedUserProfileImages: [
-                      'user1.jpg',
-                      'user2.jpg',
-                      'user3.jpg',
-                    ],
-                  ),
-                ],
+                        RecommendedChallengeInfo(
+                          howManyPeopleJoind: '968,000',
+                          activityName: '三月400分鐘x Runna挑戰',
+                          introduce: '紀錄400分鐘的活動。解鎖2週免費體驗+贏取夏威夷賽事之旅!',
+                          reward: '獎勵',
+                          imageName: 'challenge2.jpg',
+                        ),
+                        RecommendedChallengeInfo(
+                          howManyPeopleJoind: '1,123,000',
+                          activityName: '三月十天活動挑戰',
+                          introduce: '你能連續十天做到嗎?',
+                          reward: '數位獎盃',
+                          imageName: 'challenge3.jpg',
+                        ),
+                      ],
+                    ),
+                    const ActivityCard(
+                      yourName: 'Will',
+                      yourProfileImage: 'userX.png',
+                      activityName: '下午騎車',
+                      activityType: 'ride',
+                      distance: '22.17 公里',
+                      climbHeight: '63 公尺',
+                      duringtime: '1小時16分',
+                      activityStartTime: '2024年6月21日 下午16:19',
+                      district: '淡水區',
+                      city: '新北市',
+                      imageName: 'myActivity5.jpg',
+                      likeCount: 5,
+                      //按讚者的頭像，最多傳3個
+                      likedUserProfileImages: [
+                        'user1.jpg',
+                        'user2.jpg',
+                        'user3.jpg',
+                      ],
+                    ),
+                    const Divider(height: 30, thickness: 6, color: generalGrey),
+                    const ActivityCard(
+                      yourName: 'Kyle Crane(哈蘭超人)',
+                      yourProfileImage: 'userCrane.webp',
+                      activityName: '恆春->知本',
+                      activityType: 'ride',
+                      distance: '111.17 公里',
+                      climbHeight: '1134 公尺',
+                      duringtime: '5小時26分',
+                      activityStartTime: '2022年7月12日 清晨7:34',
+                      district: '恆春鎮',
+                      city: '屏東縣',
+                      imageName: 'myActivity4.jpg',
+                    ),
+                  ],
+                ),
               ),
             ),
 
